@@ -1,0 +1,10 @@
+---
+# Openvpn  server
+vpn_routing_cdr                 : "10.8.0.0/16"
+vpn_routing_server_iface        : "eth0"
+# Network to route to
+vpn_routing_network            : 172.31.0.0/16
+
+iptables_rule                   : "iptables -t nat -A POSTROUTING -s {{ vpn_routing_cdr }} -o {{ vpn_routing_server_iface }} -j MASQUERADE && iptables -t nat -A POSTROUTING -s {{ vpn_routing_network }} -o {{ vpn_routing_server_iface }} -j MASQUERADE"
+iptables_check                  : "MASQUERADE"
+...

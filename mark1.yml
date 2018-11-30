@@ -1,0 +1,8 @@
+- hosts: "localhost"
+  become: True
+  tasks:
+    - include: roles/tasks/main.yml
+  handlers:
+    - include: roles/handlers/main.yml
+  vars_files:
+    - 'roles/defaults/main.yml'

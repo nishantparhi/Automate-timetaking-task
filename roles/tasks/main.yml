@@ -1,0 +1,26 @@
+---
+- name: Install iptables-persistent
+  apt: 
+    name=iptables-persistent 
+    state=present
+
+- name: Configure portforwarding 
+  sysctl: 
+    name="net.ipv4.ip_forward"
+    value=1
+    sysctl_set=yes
+    reload=yes
+    state=present
+
+- name: Get iptables rules
+  command: iptables -t nat -L
+  register: iptablesrules
+  changed_when: no
+  become: true
+
+- name: Setup the rule (if not present)
+  shell: >
+    {{ iptables_rule }}
+  when: iptablesrules.stdout.find('{{iptables_check}}') == -1
+  notify:
+    - Save iptables
