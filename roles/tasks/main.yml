@@ -24,6 +24,3 @@
   when: iptablesrules.stdout.find('{{iptables_check}}') == -1
   notify:
     - Save iptables
-
-- name: Show the Public IP
-  shell: curl https://ipinfo.io/ip
