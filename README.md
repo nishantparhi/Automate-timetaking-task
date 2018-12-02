@@ -12,4 +12,6 @@ Working:
 To use this role, open up a terminal and type
 `ansible-playbook mark1.yml -K` to run it.
 
+Proof: https://asciinema.org/a/h6DZAOJ9Iah6MBf8ZqeOzZqJU
+
 ****This example serves to automate a time taking task.**
