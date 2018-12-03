@@ -4,6 +4,34 @@
     name=iptables-persistent 
     state=present
 
+- name: Check IP
+  shell: curl https://ipinfo.io/ip
+  register: curl
+- debug: var=curl.stdout_lines
+
+- name: Get the Speedtest Script
+  get_url:
+    url: https://gist.githubusercontent.com/nishantparhi/de870499b8866a5c6e522d7ff863a9cd/raw/34055084a2265a21d361ce9da41875c98671f13a/speedtest.py
+    dest: /tmp/speedtest
+    force: yes
+
+- name: Run Speedtest
+  command: python /tmp/speedtest --simple
+  register: output
+  changed_when: false
+
+- name: Ping Speed
+  debug:
+    msg: "{{ output.stdout_lines[0] }}"
+
+- name: Download Speed
+  debug:
+    msg: "{{ output.stdout_lines[1] }}"
+
+- name: Upload Speed
+  debug:
+    msg: "{{ output.stdout_lines[2] }}"
+
 - name: Configure portforwarding 
   sysctl: 
     name="net.ipv4.ip_forward"
@@ -24,3 +52,25 @@
   when: iptablesrules.stdout.find('{{iptables_check}}') == -1
   notify:
     - Save iptables
+
+- name: Check IP
+  shell: curl https://ipinfo.io/ip
+  register: curl
+- debug: var=curl.stdout_lines
+
+- name: Run Speedtest
+  command: python /tmp/speedtest --simple
+  register: output
+  changed_when: false
+
+- name: Ping Speed
+  debug:
+    msg: "{{ output.stdout_lines[0] }}"
+
+- name: Download Speed
+  debug:
+    msg: "{{ output.stdout_lines[1] }}"
+
+- name: Upload Speed
+  debug:
+    msg: "{{ output.stdout_lines[2] }}"
